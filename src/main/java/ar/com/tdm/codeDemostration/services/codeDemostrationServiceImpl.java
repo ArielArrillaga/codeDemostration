@@ -41,6 +41,8 @@ public class codeDemostrationServiceImpl implements codeDemostrationService {
 		return this.dao.servicioEjemplo(variable);
 	}
 
+	// the login service validates that the password is correct, and that the user hasn't more than 3 failed login Attempts
+	//if all is OK so update the login date, reset retryCount, generate and return JWT
 	@Override
 	public LoginResponse login(String userName, String password64, String nickName) throws Exception { 	//userName is the dni and nickName is a unique alias
 																										//to find i need dni + genre, or nickName

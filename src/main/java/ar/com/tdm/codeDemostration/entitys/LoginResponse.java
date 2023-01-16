@@ -10,10 +10,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class LoginResponse {
-    private String jwt;
-    private String mensaje;
-    private Boolean state;
-    private Boolean ok;
-    private Boolean expired;
-    private int intentosRestantes = 3; //numero maximo
+    private String jwt;					//is the JWT
+    private String mensaje;				//show a message
+    private Boolean state;				//show if the validations are OK or not
+    private Boolean ok;					//show if the service works or not
+    private Boolean expired;			//show if the pas is expired or not
+    private int intentosRestantes = 3; 	//max attempts
 }
