@@ -13,9 +13,9 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public class codeDemostrationDaoImpl implements codeDemostrationDao {
+public class CodeDemostrationDaoImpl implements CodeDemostrationDao {
 
-	private final Logger log = LoggerFactory.getLogger(codeDemostrationDaoImpl.class);
+	private final Logger log = LoggerFactory.getLogger(CodeDemostrationDaoImpl.class);
 
 	@Autowired
 	@Qualifier("DB1")

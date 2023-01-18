@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import ar.com.tdm.codeDemostration.daos.codeDemostrationDao;
+import ar.com.tdm.codeDemostration.daos.CodeDemostrationDao;
 import ar.com.tdm.codeDemostration.entitys.GeneroResponse;
 import ar.com.tdm.codeDemostration.entitys.JwtResponse;
 import ar.com.tdm.codeDemostration.entitys.LoginResponse;
@@ -22,9 +22,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 
 @Service
-public class codeDemostrationServiceImpl implements codeDemostrationService {
+public class CodeDemostrationSecurityServiceImpl implements CodeDemostrationSecurityService {
 
-	private final Logger log = LoggerFactory.getLogger(codeDemostrationServiceImpl.class);
+	private final Logger log = LoggerFactory.getLogger(CodeDemostrationSecurityServiceImpl.class);
 	
 	//with this line i generate a random key with HS512, and the key changes in each instance of the program, 
 	//if i restart the server, the key will change
@@ -33,7 +33,7 @@ public class codeDemostrationServiceImpl implements codeDemostrationService {
 																		// but in the real code i use another
 
 	@Autowired
-	codeDemostrationDao dao;
+	CodeDemostrationDao dao;
 
 	@Override
 	public String servicioEjemplo(String variable) throws Exception {

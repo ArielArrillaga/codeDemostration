@@ -2,7 +2,7 @@ package ar.com.tdm.codeDemostration.daos;
 
 import java.util.Date;
 
-public interface codeDemostrationDao {
+public interface CodeDemostrationDao {
 
 	public String servicioEjemplo(String variable) throws Exception;
 	public byte[] getPass(String userName, String nickName) throws Exception;

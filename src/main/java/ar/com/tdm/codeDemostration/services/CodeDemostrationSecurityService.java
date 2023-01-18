@@ -4,7 +4,7 @@ import ar.com.tdm.codeDemostration.entitys.GeneroResponse;
 import ar.com.tdm.codeDemostration.entitys.LoginResponse;
 import ar.com.tdm.codeDemostration.entitys.ResponseBoolean;
 
-public interface codeDemostrationService {
+public interface CodeDemostrationSecurityService {
 
 	public String servicioEjemplo(String variable) throws Exception;
 	public LoginResponse login(String userName, String password64, String nickName) throws Exception;

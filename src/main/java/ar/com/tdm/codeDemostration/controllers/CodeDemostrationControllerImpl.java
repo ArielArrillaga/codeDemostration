@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import ar.com.tdm.codeDemostration.entitys.GeneroResponse;
 import ar.com.tdm.codeDemostration.entitys.LoginRequest;
 import ar.com.tdm.codeDemostration.entitys.LoginResponse;
+import ar.com.tdm.codeDemostration.entitys.Response;
 import ar.com.tdm.codeDemostration.entitys.ResponseBoolean;
-import ar.com.tdm.codeDemostration.services.codeDemostrationService;
+import ar.com.tdm.codeDemostration.entitys.SendEmailAdjuntos;
+import ar.com.tdm.codeDemostration.services.CodeDemostrationEmailService;
+import ar.com.tdm.codeDemostration.services.CodeDemostrationSecurityService;
 import io.swagger.annotations.Api;
 
 @RestController
@@ -30,19 +33,22 @@ import io.swagger.annotations.Api;
 @CrossOrigin(allowCredentials = "true", origins = "*", allowedHeaders = "*", methods = { RequestMethod.GET,
 		RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT, RequestMethod.OPTIONS, RequestMethod.PATCH,
 		RequestMethod.HEAD })
-public class codeDemostrationControllerImpl implements codeDemostrationController {
+public class CodeDemostrationControllerImpl implements CodeDemostrationController {
 
-	private final Logger log = LoggerFactory.getLogger(codeDemostrationControllerImpl.class);
+	private final Logger log = LoggerFactory.getLogger(CodeDemostrationControllerImpl.class);
 
 	@Autowired
-	codeDemostrationService service;
+	CodeDemostrationSecurityService securityService;
+	
+	@Autowired
+	CodeDemostrationEmailService emailService;
 
 	@Override
 	@GetMapping("/sample")
 	@ResponseBody
 	public ResponseEntity<String> servicioEjemplo(String variable) throws Exception {
 		
-		return new ResponseEntity<String>(this.service.servicioEjemplo(variable), HttpStatus.OK);
+		return new ResponseEntity<String>(this.securityService.servicioEjemplo(variable), HttpStatus.OK);
 	}
 
 	@Override
@@ -52,7 +58,7 @@ public class codeDemostrationControllerImpl implements codeDemostrationControlle
 	    LoginResponse response = new LoginResponse();
 		try {
 			log.info("codeDemostrationControllerImpl: login: inicio: userName (sin ceros adelante): "+ request.getUserName()+", nickName: "+ request.getNickName()); 
-			response = this.service.login(request.getUserName(), request.getPassword(), request.getNickName());
+			response = this.securityService.login(request.getUserName(), request.getPassword(), request.getNickName());
 			log.info("codeDemostrationControllerImpl: login: respuesta: "+response); 
 		} catch (Exception e) {
 			log.error("codeDemostrationControllerImpl: login: ERROR: " + e);
@@ -60,35 +66,19 @@ public class codeDemostrationControllerImpl implements codeDemostrationControlle
 		}
 		return new ResponseEntity<LoginResponse>(response, HttpStatus.OK);
 	}
-
-	@Override
-	@GetMapping("/existNickName")
-	public ResponseEntity<ResponseBoolean> existNickName(String nickName) throws Exception {
-		ResponseBoolean response = new ResponseBoolean();
-		try {
-			log.info("codeDemostrationControllerImpl: existNickName: inicio: nickName: "+ nickName); 
-			response = this.service.existNickName(nickName);
-			log.info("codeDemostrationControllerImpl: existNickName: respuesta: "+response); 
-		} catch (Exception e) {
-			log.error("codeDemostrationControllerImpl: existNickName: ERROR: " + e);
-			return new ResponseEntity<ResponseBoolean>(response, HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<ResponseBoolean>(response, HttpStatus.OK);
-	}
-
-	@Override
-	@GetMapping("/getGenero")
-	public ResponseEntity<GeneroResponse> getGenero(String dniONick) throws Exception {
-	        GeneroResponse response = new GeneroResponse();
-	        try {
-	            log.info("codeDemostrationControllerImpl: getGenero: request: "+dniONick); 
-	            response = service.getGenero(dniONick);
-	            log.info("codeDemostrationControllerImpl: getGenero: respuesta: "+response); 
-	        } catch (Exception e) {
-	            log.error("codeDemostrationControllerImpl: getGenero: ERROR: " + e);
-	            return new ResponseEntity<GeneroResponse>(response, HttpStatus.BAD_REQUEST);
-	        }
-	        return new ResponseEntity<GeneroResponse>(response, HttpStatus.OK);
-	    }
-
+	
+    @Override
+    @PostMapping("/sendEmailAdjunto")
+    public ResponseEntity<Response> sendEmailAdjunto(SendEmailAdjuntos request) {
+        Response response = new Response();
+        try {
+            log.info("codeDemostrationControllerImpl: sendEmailAdjunto: request: "+request); 
+            response = emailService.sendEmailAdjunto(request);
+            log.info("codeDemostrationControllerImpl: sendEmailAdjunto: respuesta: "+response); 
+        } catch (Exception e) {
+            log.error("codeDemostrationControllerImpl: sendEmailAdjunto: ERROR: " + e);
+            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<Response>(response, HttpStatus.OK);
+    }
 }

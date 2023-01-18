@@ -139,6 +139,12 @@
 		    <artifactId>spring-security-crypto</artifactId>
 		    <version>5.7.2</version>
 		</dependency>
+				<!-- enviar emails -->
+		<dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
+        </dependency>
 	</dependencies>
 	<build>
 		<!-- Cambio el nombre para poder deployar en un tomcat -->
