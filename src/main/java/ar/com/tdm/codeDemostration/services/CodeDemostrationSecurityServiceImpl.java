@@ -1,21 +1,30 @@
 package ar.com.tdm.codeDemostration.services;
 
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
+
 import ar.com.tdm.codeDemostration.daos.CodeDemostrationDao;
 import ar.com.tdm.codeDemostration.entitys.GeneroResponse;
+import ar.com.tdm.codeDemostration.entitys.IdUser;
 import ar.com.tdm.codeDemostration.entitys.JwtResponse;
 import ar.com.tdm.codeDemostration.entitys.LoginResponse;
 import ar.com.tdm.codeDemostration.entitys.ResponseBoolean;
+import ar.com.tdm.codeDemostration.entitys.UserDataResponse;
+import ar.com.tdm.codeDemostration.utils.CallHttp;
+import ar.com.tdm.codeDemostration.utils.ToHashMap;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -34,6 +43,9 @@ public class CodeDemostrationSecurityServiceImpl implements CodeDemostrationSecu
 
 	@Autowired
 	CodeDemostrationDao dao;
+	
+	@Value("${url.getUserData}")
+	private String getUserData;
 
 	@Override
 	public String servicioEjemplo(String variable) throws Exception {
@@ -329,5 +341,51 @@ public class CodeDemostrationSecurityServiceImpl implements CodeDemostrationSecu
 			response.setState(false);
 			return response;
 		}
+	}
+
+	@Override
+	public UserDataResponse getUserData(IdUser request) throws Exception {
+		UserDataResponse response = new UserDataResponse();
+        log.info("codeDemostrationServiceImpl: getUserData: inicio");
+        
+          // make url
+          String urlString = getUserData;
+          URL url = new URL(urlString);
+          log.info("codeDemostrationServiceImpl: getUserData: url " + urlString);
+
+          try {
+              //i have two ways to create a post request:
+        	  //-------------------------------------------------------------------------------------------------
+        	  //1
+        	  //the first one is with hashmap, 
+        	  //in this case i create a hashmap with the class attributes, later in ¨llamadoHttpPost¨...
+        	  //i make a json string for each key-value. this way allows me to add another pair key-value that doesn't exist in the class
+              HashMap <String, String> hashRequest = ToHashMap.asHashMap(request.toString());
+              //example
+              //hashRequest.put("anotherKey", "anotherValue");
+              String llamadoResponse = CallHttp.llamadoHttpPost(url, hashRequest);
+              //-------------------------------------------------------------------------------------------------
+              //2
+              //the second way is with Gson, with this library i can convert a class to json String.
+              //this way is more simple, but if you need send a "null" you can't use it.
+              //example: for a class with two attributes, name and lastName: with lastName = null
+              //Expected result = {"name":"Ariel","lastName":null} 
+              //Obtained result = {"name":"Ariel"} if the value is "null" Gson delete it
+              Gson g = new Gson();
+              String jsonStr = g.toJson(request);
+              llamadoResponse = CallHttp.llamadoHttpPost(url, jsonStr); //in this case llamadoHttpPost only send the request
+            //-------------------------------------------------------------------------------------------------
+              
+              log.info("codeDemostrationServiceImpl: getUserData: respuesta: " + response);
+              
+              response = g.fromJson(llamadoResponse, UserDataResponse.class); //parse the response
+
+          } catch (Exception e) {
+              log.error("codeDemostrationServiceImpl: getUserData: Error llamado " + urlString + " - " + e);
+              response.setMensaje("Algo salió mal, no pudimos obtener los datos del usuario.");
+              response.setOk(false);
+          }
+          return response;
+	   
 	}
 }

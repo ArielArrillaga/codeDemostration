@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.tdm.codeDemostration.entitys.GeneroResponse;
+import ar.com.tdm.codeDemostration.entitys.IdUser;
 import ar.com.tdm.codeDemostration.entitys.LoginRequest;
 import ar.com.tdm.codeDemostration.entitys.LoginResponse;
 import ar.com.tdm.codeDemostration.entitys.Response;
 import ar.com.tdm.codeDemostration.entitys.ResponseBoolean;
 import ar.com.tdm.codeDemostration.entitys.SendEmailAdjuntos;
+import ar.com.tdm.codeDemostration.entitys.UserDataResponse;
 import ar.com.tdm.codeDemostration.services.CodeDemostrationEmailService;
 import ar.com.tdm.codeDemostration.services.CodeDemostrationSecurityService;
 import io.swagger.annotations.Api;
@@ -81,4 +83,18 @@ public class CodeDemostrationControllerImpl implements CodeDemostrationControlle
         }
         return new ResponseEntity<Response>(response, HttpStatus.OK);
     }
+
+	@Override
+	public ResponseEntity<UserDataResponse> getUserData(IdUser request) {
+		UserDataResponse response = new UserDataResponse();
+	        try {
+	            log.info("codeDemostrationControllerImpl: getUserData: request: "+request); 
+	            response = securityService.getUserData(request);
+	            log.info("codeDemostrationControllerImpl: getUserData: respuesta: "+response); 
+	        } catch (Exception e) {
+	            log.error("codeDemostrationControllerImpl: getUserData: ERROR: " + e);
+	            return new ResponseEntity<UserDataResponse>(response, HttpStatus.BAD_REQUEST);
+	        }
+	        return new ResponseEntity<UserDataResponse>(response, HttpStatus.OK);
+	}
 }

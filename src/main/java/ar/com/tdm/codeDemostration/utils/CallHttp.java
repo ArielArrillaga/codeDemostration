@@ -237,12 +237,20 @@ public class CallHttp {
         OutputStream os = con.getOutputStream();
         OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
         
-        //recorro el hashMap y voy creando el json  en un string, este string es el que se envia como body
+      //i use the hashmap to create a json String, for each pair key-value i add a new pair in json
         String stringJson ="{";
         int aux = body.size();
         for (Entry<String, String> entry : body.entrySet()) {
-	     
-	        stringJson = stringJson + "\""+entry.getKey()+"\":\""+entry.getValue()+"\""; // en llamadoHttpPost esta mejorado revisar si surge error
+            
+	     if (entry.getValue()!=null){
+	         if (entry.getValue().contains("{")) {
+	             stringJson = stringJson + "\""+entry.getKey()+"\":"+entry.getValue();  // if the value have { this means that is a "sub-json"so i don't add quotation marks
+	         }else {
+	             stringJson = stringJson + "\""+entry.getKey()+"\":\""+entry.getValue()+"\"";	             
+	         }
+         }else{
+              stringJson = stringJson + "\""+entry.getKey()+"\":"+entry.getValue();// if the value is "null" i delete the quotation marks.
+         }
 	        aux=aux-1;
 	        if (aux>0) {
 	        	 stringJson = stringJson + ",";
@@ -293,12 +301,20 @@ public class CallHttp {
         OutputStream os = con.getOutputStream();
         OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
         
-        //recorro el hashMap y voy creando el json  en un string, este string es el que se envia como body
+      //i use the hashmap to create a json String, for each pair key-value i add a new pair in json
         String stringJson ="{";
         int aux = body.size();
         for (Entry<String, String> entry : body.entrySet()) {
-	     
-	        stringJson = stringJson + "\""+entry.getKey()+"\":\""+entry.getValue()+"\""; // en llamadoHttpPost esta mejorado revisar si surge error
+            
+	     if (entry.getValue()!=null){
+	         if (entry.getValue().contains("{")) {
+	             stringJson = stringJson + "\""+entry.getKey()+"\":"+entry.getValue();  // if the value have { this means that is a "sub-json"so i don't add quotation marks
+	         }else {
+	             stringJson = stringJson + "\""+entry.getKey()+"\":\""+entry.getValue()+"\"";	             
+	         }
+         }else{
+              stringJson = stringJson + "\""+entry.getKey()+"\":"+entry.getValue();// if the value is "null" i delete the quotation marks.
+         }
 	        aux=aux-1;
 	        if (aux>0) {
 	        	 stringJson = stringJson + ",";
@@ -348,19 +364,19 @@ public class CallHttp {
         OutputStream os = con.getOutputStream();
         OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
         
-        //recorro el hashMap y voy creando el json  en un string, este string es el que se envia como body
+        //i use the hashmap to create a json String, for each pair key-value i add a new pair in json
         String stringJson ="{";
         int aux = body.size();
         for (Entry<String, String> entry : body.entrySet()) {
             
 	     if (entry.getValue()!=null){
 	         if (entry.getValue().contains("{")) {
-	             stringJson = stringJson + "\""+entry.getKey()+"\":"+entry.getValue();  // si el valor tiene { quiere decir que es un "sub-json" entonces no le agrego las comillas
+	             stringJson = stringJson + "\""+entry.getKey()+"\":"+entry.getValue();  // if the value have { this means that is a "sub-json"so i don't add quotation marks
 	         }else {
 	             stringJson = stringJson + "\""+entry.getKey()+"\":\""+entry.getValue()+"\"";	             
 	         }
          }else{
-              stringJson = stringJson + "\""+entry.getKey()+"\":"+entry.getValue();//si el valor es null elimino las comillas, sino me lo toma como un string
+              stringJson = stringJson + "\""+entry.getKey()+"\":"+entry.getValue();// if the value is "null" i delete the quotation marks.
          }
 	        aux=aux-1;
 	        if (aux>0) {
