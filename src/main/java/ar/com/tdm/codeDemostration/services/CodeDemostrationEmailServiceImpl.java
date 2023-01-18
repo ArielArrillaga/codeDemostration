@@ -38,8 +38,12 @@ public class CodeDemostrationEmailServiceImpl implements CodeDemostrationEmailSe
 
 	@Override
 	public Response sendEmailAdjunto(SendEmailAdjuntos request) { //this service can only send an attached file
-	        
-    	SendEmailRequest data = request.getData();
+	    
+		//This service was made to send generic emails, all the information that it need will be received by parameters.
+		//Actually I have a project that only has code to send email, with attachments or not, and other projects call it and send it the necessary information,
+		//the other projects have in their properties all the information such as the html that is compressed. If you want to know more about that, please send me a text.
+    	
+		SendEmailRequest data = request.getData();
         Response response = new Response();
         String to = data.getTo();
         
