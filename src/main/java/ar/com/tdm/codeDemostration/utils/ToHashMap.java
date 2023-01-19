@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 public class ToHashMap {
     public static  <T> HashMap<String, String> asHashMap(String stringRepresentation) {
+    	
+    	//this class convert "ToString" to hashMap
         HashMap<String, String> map = new HashMap<String, String>();
   
         if (stringRepresentation == null || stringRepresentation.trim().equals("")) {
